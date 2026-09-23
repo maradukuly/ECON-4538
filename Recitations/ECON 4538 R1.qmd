@@ -1,0 +1,260 @@
+---
+title: "Julia Basics Tutorial"
+author: "Martín Dibarrart Muñoz"
+format: pdf
+engine: julia
+---
+
+# Introduction
+
+This notebook introduces essential Julia programming features:
+
+- Basics
+- Functions
+- Loops
+- Vectorized operations/functions
+- Finding maximum values (`maximum`) and their positions (`argmax`)
+
+But first, you have to install the required software. Once you installed VSCode, you have to install the Julia and Quarto extension. You also need a LaTeX distribution (e.g. Miktex)
+
+If you want to open a Julia terminal in VSCode, press Ctrl+Shift+P (Windows/Linux) or Cmd+Shift+P (Mac), and write Julia: Start REPL. For Quarto terminal, do the same key combination and write Quarto: Preview.
+
+# Some Markdown features
+
+Note that you can write equations here as you would do it in LaTeX:
+
+$$u(c_t)=\ln{c_t}$$
+
+# Title example
+
+## Subtitle example
+
+Let's begin some bullet points:
+
+- Hello
+- Hola
+- Salut
+
+To write in *italics* and **bold**
+
+An horizontal breaking line:
+
+------------------------------------------------------------------------
+
+# Variables and expressions
+
+Now let's take a look how Quarto notebooks work with Julia:
+
+```{julia}
+# Assigning variables
+a = 3
+b = 4
+
+# Arithmetic
+c = a^2 + b^2
+```
+
+Note that the last assigned object is shown in the notebook. This can be annoying, but you can avoid it doing the following:
+
+```{julia}
+# Assigning variables
+a = 3
+b = 4
+
+# Arithmetic
+c = a^2 + b^2;
+```
+
+Also you can explicitly print out stuff:
+
+```{julia}
+println("Hello")
+println(2+5);
+```
+
+# Variable types
+
+```{julia}
+
+x = 42             # Integer
+y = 3.14           # Float
+z = "Hello"        # String
+v = [1, 2, 3]      # Vector (1D Array)
+M = [1 2; 3 4]     # Matrix (2D Array)
+
+println(v)
+println(M)
+
+(typeof(x), typeof(y), typeof(z), typeof(v), typeof(M))
+```
+
+# Functions
+
+Functions are central in Julia. They can take multiple arguments, optional arguments, and return multiple values.
+
+```{julia}
+function hypotenuse(a, b)
+    return sqrt(a^2 + b^2)
+end
+
+# One-line function
+square(x) = x^2
+
+# Anonymous function
+cube = x -> x^3
+
+println(hypotenuse(3,4))
+println(square(5))
+println(cube(2))
+println((square(5),cube(2)))
+
+# Multiple arguments
+function weighted_average(x, y, w1, w2)
+    return (w1*x + w2*y) / (w1 + w2)
+end
+
+println(weighted_average(10, 20, 2, 1))
+
+# Optional arguments
+function power(x, p=2)
+    return x^p
+end
+
+println(power(3))
+println(power(3,3))
+
+# Keyword arguments
+function greet(name; polite=true)
+    if polite
+        return "Hello, $name. Nice to meet you!"
+    else
+        return "Hey $name"
+    end
+end
+
+println((greet("Alice"), greet("Bob"; polite=false)))
+
+#Multiple Outputs
+function minmax(v)
+    return minimum(v), maximum(v)
+end
+
+vals = [3, 7, 2, 9, 5]
+mn, mx = minmax(vals)
+
+println(mn)
+println(mx)
+```
+
+# Loops
+
+Very useful for dynamic programming
+
+```{julia}
+n = 10
+s = 0
+for i in 1:n
+    println(s)
+    s += i
+end
+
+#While loops
+function factorial(n)
+    f = 1
+    i = 1
+    while i <= n
+        f *= i
+        i += 1
+    end
+    return f
+end
+println(factorial(5))
+
+#Break loop
+function lower_than_n(n)
+    for i = 1:100
+        println("Let's analyze $i")
+        if i<n
+            println("$i is lower than $n, so we keep going!")
+        else
+            println("$i is equal to $n, so we stop!")
+            break
+        end
+    end
+end
+println(lower_than_n(7))
+```
+
+# Vectorize
+
+Vectorizing certain operations has a different syntax in Julia. Here are some examples of this:
+
+```{julia}
+v = [1, 2, 3, 4, 5]
+
+# Square each element
+v_squared = v .^ 2
+
+# Add two vectors element-wise
+u = [10, 20, 30, 40, 50]
+v_plus_u = v .+ u
+
+# Apply a function element-wise
+exp_v = exp.(v)
+
+(v_squared, v_plus_u, exp_v)
+```
+
+# Optimization
+
+```{julia}
+
+x = [3, 7, 2, 9, 5]
+
+m = maximum(x)      # Maximum value
+pos = argmax(x)     # Position of maximum value
+
+println((m, pos))
+
+# Matrix
+A = [3 7 2;
+     9 5 1]
+
+# Maximum of entire matrix
+m_all = maximum(A)
+
+# Position of maximum value (linear index)
+pos_all = argmax(A)
+
+# Find both value and position at once
+val, pos = findmax(A)
+
+println((m_all, pos_all, val, pos, A[pos]))
+
+# Maximum per row (broadcasting over each row as a vector)
+row_max = [maximum(row) for row in eachrow(A)]
+row_argmax = [argmax(row) for row in eachrow(A)]
+
+# Maximum per column (broadcasting over each column as a vector)
+col_max = [maximum(col) for col in eachcol(A)]
+col_argmax = [argmax(col) for col in eachcol(A)]
+
+println((row_max, row_argmax, col_max, col_argmax))
+
+```
+
+# Modules
+
+```{julia}
+using Pkg # do this once per session/ in a document 
+Pkg.activate(".")  # Activate the current environment
+
+# Load the package
+using Plots
+Pkg.add("Plots")  # Uncomment this line if you haven't installed Plots yet
+
+# Example: simple plot
+x = 0:0.1:2π
+y = sin.(x)
+plot(x, y, label="sin(x)")
+```
