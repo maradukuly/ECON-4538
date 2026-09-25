@@ -1,0 +1,27 @@
+---
+title: "Advanced Labor Economics Problem Set 2"
+author: "Mara Dukuly"
+date: "09/23/2026"
+format: pdf
+engine: julia
+---
+
+## Problem One
+
+## Problem Two
+
+## Problem Three
+
+## Problem Four
+
+### Part 1
+
+### Part 2
+
+### Part 3
+
+### Part 4
+
+## AI Disclaimer
+
+- I used AI to parse the question and format it into Quarto markdown.
