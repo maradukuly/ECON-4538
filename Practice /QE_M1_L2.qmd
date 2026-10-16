@@ -1,0 +1,15 @@
+# Quant Julia Module 1, Lesson 2
+
+## Getting started with Julia: Introductory Examples
+
+Installing more packages
+
+```{julia}
+using Pkg; 
+pkgs = ["Distributions", "ForwardDiff", "LaTeXStrings", "NLsolve", "Plots", "StaticArrays"]
+
+all(haskey.(Ref(Pkg.project(). dependencies), pkgs)) || Pkg.add(pkg)
+
+using LinearAlgebra, Statistics, Plots, LaTeXStrings
+using Distributions, ForwardDiff NLsolve, StaticArrays
+```
